@@ -16,4 +16,34 @@ MonoBehaviour:
   m_GuidHigh: 4978181078868130952
   m_DataStore:
     m_Storage: []
-  m_Images: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 4658428034175664359
+      m_GuidHigh: 882305288127703992
+    m_SerializedTextureGuid:
+      m_GuidLow: 9823572295718272660
+      m_GuidHigh: 7936073157729300617
+    m_Size: {x: 0.21, y: 0.21}
+    m_SpecifySize: 1
+    m_Name: Default-Checker
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 5362476389432894335
+      m_GuidHigh: 18246556412576735631
+    m_SerializedTextureGuid:
+      m_GuidLow: 9476759129300914553
+      m_GuidHigh: 15482147474117706634
+    m_Size: {x: 0.21, y: 0.21}
+    m_SpecifySize: 1
+    m_Name: rods_charge_marker
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 5300423982292456057
+      m_GuidHigh: 8503332746389663677
+    m_SerializedTextureGuid:
+      m_GuidLow: 13525664192408753162
+      m_GuidHigh: 8767333389158644411
+    m_Size: {x: 0.21, y: 0.21}
+    m_SpecifySize: 1
+    m_Name: electrical_force_marker
+    m_Texture: {fileID: 0}
