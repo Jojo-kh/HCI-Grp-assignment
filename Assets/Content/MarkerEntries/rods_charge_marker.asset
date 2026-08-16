@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: rods_charge_marker
   m_EditorClassIdentifier: Assembly-CSharp::MarkerContentEntry
   referenceImageName: rods_charge_marker
-  contentPrefab: {fileID: 0}
-  subjectTitle: 
-  explanationText: 
-  localScaleOverride: {x: 1, y: 1, z: 1}
+  contentPrefab: {fileID: 2848728892981550569, guid: 84b401a09a50ba1498821ba128f9611d, type: 3}
+  subjectTitle: Rods & Charge
+  explanationText: Opposite currents. Move the test charge to see how the two fields
+    combine.
+  localScaleOverride: {x: 0.015, y: 0.015, z: 0.015}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -7,6 +8,7 @@ public class ARContentManager : MonoBehaviour
 {
     public MarkerContentDatabase database;
     ARTrackedImageManager trackedImageManager;
+    readonly Dictionary<TrackableId, GameObject> spawnedContent = new();
 
     void Awake()
     {
@@ -20,14 +22,33 @@ public class ARContentManager : MonoBehaviour
     {
         foreach (var trackedImage in args.added) UpdateContent(trackedImage);
         foreach (var trackedImage in args.updated) UpdateContent(trackedImage);
+
+        foreach (var removed in args.removed)
+        {
+            if (spawnedContent.TryGetValue(removed.Key, out var instance))
+            {
+                Destroy(instance);
+                spawnedContent.Remove(removed.Key);
+            }
+        }
     }
 
     void UpdateContent(ARTrackedImage trackedImage)
     {
         var entry = database.GetByImageName(trackedImage.referenceImage.name);
-        if (entry == null) return;
+        if (entry == null || entry.contentPrefab == null) return;
 
         bool isTracking = trackedImage.trackingState == TrackingState.Tracking;
-        Debug.Log($"{entry.subjectTitle}: tracking = {isTracking}");
+
+        if (!spawnedContent.TryGetValue(trackedImage.trackableId, out var instance))
+        {
+            instance = Instantiate(entry.contentPrefab, trackedImage.transform);
+            instance.transform.localPosition = Vector3.zero;
+            instance.transform.localRotation = Quaternion.identity;
+            instance.transform.localScale = entry.localScaleOverride;
+            spawnedContent[trackedImage.trackableId] = instance;
+        }
+
+        instance.SetActive(isTracking);
     }
 }
