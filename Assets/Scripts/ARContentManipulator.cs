@@ -11,6 +11,8 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 public class ARContentManipulator : MonoBehaviour
 {
     [Header("Drag")]
+    [Tooltip("Off for content where one-finger drag is used for something else instead (e.g. repositioning an object inside the content) - pinch zoom still works either way.")]
+    public bool enableDrag = true;
     [Tooltip("Multiplier on how far the content moves per screen-space drag distance.")]
     public float dragSpeed = 1f;
 
@@ -43,7 +45,7 @@ public class ARContentManipulator : MonoBehaviour
         var touches = Touch.activeTouches;
         int count = touches.Count;
 
-        if (count == 1)
+        if (count == 1 && enableDrag)
         {
             if (previousTouchCount != 1)
                 dragPlane = new Plane(-Camera.main.transform.forward, transform.position);

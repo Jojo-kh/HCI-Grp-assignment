@@ -303,6 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75467a17ba11b5f499ebeef1764f51a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARContentManipulator
+  enableDrag: 1
   dragSpeed: 1
   minScale: 0.3
   maxScale: 3

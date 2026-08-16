@@ -37,17 +37,18 @@ public static class BuildElectricalForceOverlayUI
         GameObject electricalPanel;
         if (existingElectrical != null)
         {
-            Debug.LogWarning("ElectricalForceInfoPanel already exists - reusing it instead of duplicating.");
             electricalPanel = existingElectrical.gameObject;
         }
         else
         {
             electricalPanel = Object.Instantiate(infoPanel.gameObject, canvasGO.transform);
             electricalPanel.name = "ElectricalForceInfoPanel";
-
-            var buttonRow = electricalPanel.transform.Find("PositionButtons");
-            if (buttonRow != null) Object.DestroyImmediate(buttonRow.gameObject);
         }
+
+        // Always strip this, regardless of whether the panel already existed or was
+        // just cloned - the row's real name is PositionButtonRow, not PositionButtons.
+        var buttonRow = electricalPanel.transform.Find("PositionButtonRow");
+        if (buttonRow != null) Object.DestroyImmediate(buttonRow.gameObject);
 
         SetText(electricalPanel.transform, "KickerText", "ELECTROMAGNETIC THEORY");
         SetText(electricalPanel.transform, "TitleText", "Electrical Force");
