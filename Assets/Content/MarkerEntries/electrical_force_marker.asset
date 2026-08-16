@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: electrical_force_marker
   m_EditorClassIdentifier: Assembly-CSharp::MarkerContentEntry
   referenceImageName: electrical_force_marker
-  contentPrefab: {fileID: 0}
-  subjectTitle: 
-  explanationText: 
+  contentPrefab: {fileID: 1859762459538746109, guid: 78f3ebb454ed8b84bb28fa6c6ea21fa0, type: 3}
+  subjectTitle: Electrical Force
+  explanationText: Tap a charge to flip its sign. The center charge always shows
+    the net pull/push from the other three.
   localScaleOverride: {x: 1, y: 1, z: 1}
+  uiPanel: {fileID: 0}

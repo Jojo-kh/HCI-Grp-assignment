@@ -30,15 +30,21 @@ public class ARContentManager : MonoBehaviour
                 Destroy(instance);
                 spawnedContent.Remove(removed.Key);
             }
+
+            var removedEntry = database.GetByImageName(removed.Value.referenceImage.name);
+            if (removedEntry?.uiPanel != null) removedEntry.uiPanel.SetActive(false);
         }
     }
 
     void UpdateContent(ARTrackedImage trackedImage)
     {
         var entry = database.GetByImageName(trackedImage.referenceImage.name);
-        if (entry == null || entry.contentPrefab == null) return;
+        if (entry == null) return;
 
         bool isTracking = trackedImage.trackingState == TrackingState.Tracking;
+
+        if (entry.uiPanel != null) entry.uiPanel.SetActive(isTracking);
+        if (entry.contentPrefab == null) return;
 
         if (!spawnedContent.TryGetValue(trackedImage.trackableId, out var instance))
         {

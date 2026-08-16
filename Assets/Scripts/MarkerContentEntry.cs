@@ -10,4 +10,7 @@ public class MarkerContentEntry : ScriptableObject
     public string subjectTitle;
     [TextArea] public string explanationText;
     public Vector3 localScaleOverride = Vector3.one;
+
+    [Tooltip("Scene UI panel to show while this marker is tracked, hidden otherwise. Optional.")]
+    public GameObject uiPanel;
 }

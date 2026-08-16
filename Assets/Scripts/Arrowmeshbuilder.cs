@@ -3,18 +3,19 @@ using UnityEngine;
 /// <summary>
 /// Builds a single solid, flat, arrow-shaped mesh (rectangle shaft + triangular
 /// head) at runtime and in the Editor. Attach directly to the object whose
-/// MeshFilter/MeshRenderer should show the arrow — no child objects needed.
+/// MeshFilter/MeshRenderer should show the arrow ï¿½ no child objects needed.
 ///
 /// The arrow points along local +Y, with its base (pivot) at local (0,0,0).
 /// Proportions are fixed internally; the single "Size" field scales the
 /// whole arrow uniformly so there's only one control to worry about.
 /// </summary>
+[ExecuteAlways]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 public class ArrowMeshBuilder : MonoBehaviour
 {
     [Header("Size")]
-    [Tooltip("Uniform scale for the whole arrow — the only shape control you need.")]
+    [Tooltip("Uniform scale for the whole arrow ï¿½ the only shape control you need.")]
     public float size = 0.3f;
 
     [Header("Troubleshooting")]
@@ -26,7 +27,7 @@ public class ArrowMeshBuilder : MonoBehaviour
     public float thicknessRatio = 0.15f;
 
     // Fixed proportions (relative to `size`). Edit these constants directly
-    // in the script if you ever want a different arrow silhouette — you
+    // in the script if you ever want a different arrow silhouette ï¿½ you
     // won't normally need to, since `size` handles everyday resizing.
     const float shaftLengthRatio = 0.6f;
     const float shaftWidthRatio = 0.15f;
