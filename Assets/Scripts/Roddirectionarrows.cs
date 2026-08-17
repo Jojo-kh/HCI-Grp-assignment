@@ -14,17 +14,26 @@ using UnityEngine;
 /// Assumes the rod's local X and Z scale are equal (a normal round cylinder,
 /// not squashed into an oval) � true for a default Cylinder primitive.
 ///
-/// IMPORTANT: this is a separate setting from RodsChargeController's
-/// rodADirection/rodBDirection. Make sure the Direction you pick here
-/// matches what you set there, or the arrows will point the wrong way
-/// relative to the actual field calculation.
+/// Each arrow's world size tracks the rod's actual radius (its X/Z scale) so a
+/// thicker rod gets bigger surface arrows and a thinner one gets smaller ones,
+/// while staying independent of the rod's length (Y scale) - stretching a rod
+/// longer shouldn't blow up each individual arrow's size to match.
+///
+/// Direction is set for you: whenever a RodsChargeController is present on the
+/// same object, its rodADirection/rodBDirection is the single source of truth and
+/// overwrites the value below every Start()/OnValidate() (see
+/// RodsChargeController.SyncRodDirectionArrows) - that keeps these surface arrows,
+/// the circulation curtain, and the radial lines all pointing in agreement with
+/// the right-hand rule relative to one shared direction, instead of three separate
+/// settings that can drift out of sync. The field below only matters if this
+/// component is used standalone, without a RodsChargeController driving it.
 /// </summary>
 public class RodDirectionArrows : MonoBehaviour
 {
     public enum CurrentDirection { Forward, Reverse }
 
     [Header("Direction")]
-    [Tooltip("Must match this rod's direction in RodsChargeController.")]
+    [Tooltip("Overwritten by RodsChargeController's rodA/rodBDirection when one is present on this object - only matters if this component is used standalone.")]
     public CurrentDirection direction = CurrentDirection.Forward;
 
     [Header("Layout")]
@@ -38,7 +47,7 @@ public class RodDirectionArrows : MonoBehaviour
     public float rodLocalRadius = 0.5f;
 
     [Header("Arrow Look")]
-    [Tooltip("Absolute world-space size of each little arrow (not affected by the rod's own scale).")]
+    [Tooltip("Size of each little arrow at rod radius scale 1 (i.e. a default 0.5-radius Cylinder) - scales up or down with the rod's actual radius from there.")]
     public float arrowSize = 0.05f;
     [Tooltip("Flat sticker-like thickness ratio for these arrows (much thinner than the main resultant arrow).")]
     public float arrowThicknessRatio = 0.02f;
@@ -68,10 +77,15 @@ public class RodDirectionArrows : MonoBehaviour
         ClearGenerated();
 
         Vector3 localScale = transform.localScale;
+        // Average of X/Z (the rod's radius scale) becomes the uniform final size on
+        // all three axes below - cancels each axis's own scale, then reapplies this
+        // radius-based scale evenly, so the arrow keeps its proportions and tracks
+        // the rod's thickness instead of a fixed absolute size or its length stretch.
+        float radiusScale = (Mathf.Abs(localScale.x) + Mathf.Abs(localScale.z)) / 2f;
         Vector3 counterScale = new Vector3(
-            1f / Mathf.Max(Mathf.Abs(localScale.x), 0.0001f),
-            1f / Mathf.Max(Mathf.Abs(localScale.y), 0.0001f),
-            1f / Mathf.Max(Mathf.Abs(localScale.z), 0.0001f));
+            radiusScale / Mathf.Max(Mathf.Abs(localScale.x), 0.0001f),
+            radiusScale / Mathf.Max(Mathf.Abs(localScale.y), 0.0001f),
+            radiusScale / Mathf.Max(Mathf.Abs(localScale.z), 0.0001f));
 
         float sign = direction == CurrentDirection.Forward ? 1f : -1f;
         Vector3 pointingLocal = Vector3.up * sign;

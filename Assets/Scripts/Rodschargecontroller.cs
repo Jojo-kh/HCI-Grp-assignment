@@ -94,6 +94,8 @@ public class RodsChargeController : MonoBehaviour
     [Tooltip("How many arrow-steps each straight line takes as it moves away from the rod.")]
     [Range(1, 20)] public int radialStepsPerLine = 6;
     public float radialStepDistance = 0.15f;
+    [Tooltip("Extra multiplier on how far each step travels outward, on top of proportional rod-size scaling - raise this to push the 4 cardinal arrows further from the rod's surface.")]
+    public float radialReachMultiplier = 2f;
     public float radialArrowSize = 0.05f;
     public float radialArrowThicknessRatio = 0.02f;
     public Material radialArrowMaterial;
@@ -101,6 +103,7 @@ public class RodsChargeController : MonoBehaviour
     MaterialPropertyBlock propBlock;
     [SerializeField, HideInInspector] Transform circContainer;
     [SerializeField, HideInInspector] Transform radialContainer;
+    Vector3 testChargeBaseScale = Vector3.one;
 
     static readonly float[] cardinalAngles = { 0f, 90f, 180f, 270f };
 
@@ -117,6 +120,14 @@ public class RodsChargeController : MonoBehaviour
         if (buildRadialLines) BuildRadialLines();
     }
 
+    void Awake()
+    {
+        // Whatever scale the test charge was authored at (in the prefab/scene) is
+        // treated as its "1x" size, matching a default rod radius scale of 1 - see
+        // ScaleTestChargeToRods.
+        if (testCharge != null) testChargeBaseScale = testCharge.localScale;
+    }
+
     void OnEnable()
     {
         Current = this;
@@ -131,13 +142,49 @@ public class RodsChargeController : MonoBehaviour
     {
         propBlock = new MaterialPropertyBlock();
 
-        SetRendererColor(rodARenderer, rodADirection == RodDirection.Forward ? forwardColor : reverseColor);
-        SetRendererColor(rodBRenderer, rodBDirection == RodDirection.Forward ? forwardColor : reverseColor);
+        ScaleTestChargeToRods();
+        SyncRodDirectionArrows();
 
         if (buildCirculationCurtain) BuildCirculationCurtain();
         if (buildRadialLines) BuildRadialLines();
 
         MoveChargeTo(posBetween);
+    }
+
+    /// <summary>
+    /// Pushes rodADirection/rodBDirection onto each rod's RodDirectionArrows so the
+    /// little surface arrows always point the same way as the circulation curtain
+    /// and radial lines - this is the single place direction is set; RodDirectionArrows
+    /// no longer needs its own direction kept in sync by hand.
+    /// </summary>
+    void SyncRodDirectionArrows()
+    {
+        SyncOneRodDirectionArrows(rodA, rodADirection);
+        SyncOneRodDirectionArrows(rodB, rodBDirection);
+    }
+
+    void SyncOneRodDirectionArrows(Transform rod, RodDirection dir)
+    {
+        if (rod == null) return;
+        var arrows = rod.GetComponent<RodDirectionArrows>();
+        if (arrows == null) return;
+
+        arrows.direction = dir == RodDirection.Forward
+            ? RodDirectionArrows.CurrentDirection.Forward
+            : RodDirectionArrows.CurrentDirection.Reverse;
+        arrows.Build();
+    }
+
+    /// <summary>
+    /// Sizes the test charge relative to the rods' actual radius (average of both,
+    /// in case they differ), so it stays proportionate to however big the rods
+    /// themselves have been scaled instead of a fixed absolute size.
+    /// </summary>
+    void ScaleTestChargeToRods()
+    {
+        if (testCharge == null) return;
+        float rodScale = (RodRadiusScale(rodA) + RodRadiusScale(rodB)) / 2f;
+        testCharge.localScale = testChargeBaseScale * rodScale;
     }
 
     // Hook these up to the 3 UI buttons in the Inspector (OnClick).
@@ -264,6 +311,7 @@ public class RodsChargeController : MonoBehaviour
     {
         if (rod == null) return;
         Color lineColor = sourceRodDirection == RodDirection.Forward ? forwardColor : reverseColor;
+        float rodScale = RodRadiusScale(rod);
 
         for (int i = 0; i < circLinesAlongLength; i++)
         {
@@ -283,8 +331,8 @@ public class RodsChargeController : MonoBehaviour
                     if (tangential.sqrMagnitude < 0.0001f) break;
 
                     Vector3 dir = tangential.normalized;
-                    SpawnArrow(circContainer, currentPos, dir, lineColor, circArrowSize, circArrowThicknessRatio, circArrowMaterial, "CircArrow");
-                    currentPos += dir * circStepDistance;
+                    SpawnArrow(circContainer, currentPos, dir, lineColor, circArrowSize * rodScale, circArrowThicknessRatio, circArrowMaterial, "CircArrow");
+                    currentPos += dir * circStepDistance * rodScale;
                 }
             }
         }
@@ -303,6 +351,7 @@ public class RodsChargeController : MonoBehaviour
     {
         if (rod == null) return;
         Color lineColor = sourceRodDirection == RodDirection.Forward ? forwardColor : reverseColor;
+        float rodScale = RodRadiusScale(rod);
 
         for (int i = 0; i < radialLinesAlongLength; i++)
         {
@@ -321,14 +370,28 @@ public class RodsChargeController : MonoBehaviour
                     if (radial.sqrMagnitude < 0.0001f) break;
 
                     Vector3 dir = radial.normalized;
-                    SpawnArrow(radialContainer, currentPos, dir, lineColor, radialArrowSize, radialArrowThicknessRatio, radialArrowMaterial, "RadialArrow");
-                    currentPos += dir * radialStepDistance;
+                    SpawnArrow(radialContainer, currentPos, dir, lineColor, radialArrowSize * rodScale, radialArrowThicknessRatio, radialArrowMaterial, "RadialArrow");
+                    currentPos += dir * radialStepDistance * rodScale * radialReachMultiplier;
                 }
             }
         }
     }
 
     // ---------------- Shared helpers ----------------
+
+    /// <summary>
+    /// Average of the rod's actual world X/Z scale (its radius dimensions - the rod
+    /// is a round cylinder, so those two should stay equal). Used to size and space
+    /// the circulation curtain / radial line arrows in proportion to however big the
+    /// rod itself has been scaled, instead of a fixed absolute size that only looks
+    /// right at one particular rod scale.
+    /// </summary>
+    float RodRadiusScale(Transform rod)
+    {
+        if (rod == null) return 1f;
+        Vector3 s = rod.lossyScale;
+        return (Mathf.Abs(s.x) + Mathf.Abs(s.z)) / 2f;
+    }
 
     void SpawnArrow(Transform parent, Vector3 worldPos, Vector3 worldDir, Color color, float size, float thicknessRatio, Material material, string name)
     {
@@ -422,14 +485,21 @@ public class RodsChargeController : MonoBehaviour
     {
         if (Application.isPlaying)
         {
+            // Safe to rebuild immediately here - this is a live scene instance, not
+            // an asset being edited, so there's no risk of the delayCall-related
+            // prefab-corruption issue the edit-mode branch below works around.
             if (testCharge != null)
                 UpdateResultant();
+            SyncRodDirectionArrows();
+            if (buildCirculationCurtain) BuildCirculationCurtain();
+            if (buildRadialLines) BuildRadialLines();
         }
         else
         {
             UnityEditor.EditorApplication.delayCall += () =>
             {
                 if (this == null) return;
+                SyncRodDirectionArrows();
                 if (buildCirculationCurtain) BuildCirculationCurtain();
                 if (buildRadialLines) BuildRadialLines();
             };
