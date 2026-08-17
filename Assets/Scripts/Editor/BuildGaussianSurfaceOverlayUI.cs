@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEditor.Events;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,9 +14,12 @@ using UnityEngine.UI;
 /// kept, description repurposed as the live flux readout, plus a tile-inspection
 /// readout and a single full-width "cross-section view" toggle button - no position
 /// buttons, no tiles-visibility toggle, no resolution buttons; View is the only
-/// interactive control this content needs. Wires the panel into the
-/// gauss_law_marker's uiPanel field so ARContentManager shows/hides it based on
-/// tracking state, same as the other two content panels.
+/// interactive control this content needs. Wires the panel into
+/// ARContentManager.uiPanels so it shows/hides it based on tracking state, same as
+/// the other two content panels. This is wired on ARContentManager (a scene
+/// object) rather than on gauss_law_marker's MarkerContentEntry (an asset),
+/// because a ScriptableObject asset can't hold a persisting reference to a scene
+/// object - Unity silently drops it back to null on save.
 ///
 /// Re-running this always strips every auxiliary element it knows about before
 /// rebuilding, whether the panel already existed or was just cloned, so repeated
@@ -22,7 +27,7 @@ using UnityEngine.UI;
 /// </summary>
 public static class BuildGaussianSurfaceOverlayUI
 {
-    const string MarkerEntryPath = "Assets/Content/MarkerEntries/gauss_law_marker.asset";
+    const string ReferenceImageName = "gauss_law_marker";
 
     static readonly Color BackgroundColor = new Color32(0xF3, 0xF2, 0xF2, 0xFF);
     static readonly Color InkColor = new Color32(0x20, 0x1E, 0x1D, 0xFF);
@@ -104,9 +109,9 @@ public static class BuildGaussianSurfaceOverlayUI
 
         panel.SetActive(false);
 
-        WireUIPanel(panel);
+        WireUIPanel(ReferenceImageName, panel);
 
-        Debug.Log("GaussianSurfaceInfoPanel built and wired to gauss_law_marker. Starts hidden, shown by ARContentManager while that marker is tracked - save the scene.");
+        Debug.Log("GaussianSurfaceInfoPanel built and wired to ARContentManager for gauss_law_marker. Starts hidden, shown while that marker is tracked - scene saved.");
     }
 
     static void SetText(Transform root, string childName, string text)
@@ -176,17 +181,24 @@ public static class BuildGaussianSurfaceOverlayUI
         return go;
     }
 
-    static void WireUIPanel(GameObject panel)
+    static void WireUIPanel(string referenceImageName, GameObject panel)
     {
-        var entry = AssetDatabase.LoadAssetAtPath<MarkerContentEntry>(MarkerEntryPath);
-        if (entry == null)
+        var contentManager = Object.FindFirstObjectByType<ARContentManager>();
+        if (contentManager == null)
         {
-            Debug.LogError($"Could not find marker entry at {MarkerEntryPath}.");
+            Debug.LogError("No ARContentManager found in the open scene - can't wire the UI panel.");
             return;
         }
 
-        entry.uiPanel = panel;
-        EditorUtility.SetDirty(entry);
-        AssetDatabase.SaveAssets();
+        var panels = new List<ARContentManager.MarkerUIPanel>(contentManager.uiPanels ?? new ARContentManager.MarkerUIPanel[0]);
+        int existingIndex = panels.FindIndex(p => p.referenceImageName == referenceImageName);
+        var entry = new ARContentManager.MarkerUIPanel { referenceImageName = referenceImageName, panel = panel };
+        if (existingIndex >= 0) panels[existingIndex] = entry;
+        else panels.Add(entry);
+        contentManager.uiPanels = panels.ToArray();
+
+        EditorUtility.SetDirty(contentManager);
+        EditorSceneManager.MarkSceneDirty(contentManager.gameObject.scene);
+        EditorSceneManager.SaveScene(contentManager.gameObject.scene);
     }
 }

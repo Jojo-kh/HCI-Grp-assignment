@@ -7,6 +7,26 @@ using UnityEngine.XR.ARSubsystems;
 public class ARContentManager : MonoBehaviour
 {
     public MarkerContentDatabase database;
+
+    /// <summary>
+    /// Maps a marker's reference image name to its screen-space UI panel. This
+    /// lives here - on a scene MonoBehaviour - rather than as a field on
+    /// MarkerContentEntry, because MarkerContentEntry is a ScriptableObject asset,
+    /// and Unity cannot persist an asset's reference to a scene object: it holds
+    /// in memory during the Editor session but silently serializes back out as
+    /// null on save. A scene object referencing another scene object (this array
+    /// pointing at each InfoPanel) serializes correctly.
+    /// </summary>
+    [System.Serializable]
+    public struct MarkerUIPanel
+    {
+        [Tooltip("Must exactly match the image name in your Reference Image Library (same value as the matching MarkerContentEntry.referenceImageName).")]
+        public string referenceImageName;
+        [Tooltip("Scene UI panel to show while this marker is tracked, hidden otherwise.")]
+        public GameObject panel;
+    }
+    public MarkerUIPanel[] uiPanels;
+
     ARTrackedImageManager trackedImageManager;
     readonly Dictionary<TrackableId, GameObject> spawnedContent = new();
 
@@ -31,8 +51,7 @@ public class ARContentManager : MonoBehaviour
                 spawnedContent.Remove(removed.Key);
             }
 
-            var removedEntry = database.GetByImageName(removed.Value.referenceImage.name);
-            if (removedEntry?.uiPanel != null) removedEntry.uiPanel.SetActive(false);
+            SetPanelActive(removed.Value.referenceImage.name, false);
         }
     }
 
@@ -43,7 +62,7 @@ public class ARContentManager : MonoBehaviour
 
         bool isTracking = trackedImage.trackingState == TrackingState.Tracking;
 
-        if (entry.uiPanel != null) entry.uiPanel.SetActive(isTracking);
+        SetPanelActive(trackedImage.referenceImage.name, isTracking);
         if (entry.contentPrefab == null) return;
 
         if (!spawnedContent.TryGetValue(trackedImage.trackableId, out var instance))
@@ -56,5 +75,18 @@ public class ARContentManager : MonoBehaviour
         }
 
         instance.SetActive(isTracking);
+    }
+
+    void SetPanelActive(string imageName, bool active)
+    {
+        if (uiPanels == null) return;
+        foreach (var entry in uiPanels)
+        {
+            if (entry.panel != null && entry.referenceImageName == imageName)
+            {
+                entry.panel.SetActive(active);
+                return;
+            }
+        }
     }
 }
