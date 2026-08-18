@@ -207,7 +207,7 @@ public static class BuildGaussianSurfaceContent
 
         entry.contentPrefab = prefab;
         entry.subjectTitle = "Gaussian Surfaces";
-        entry.explanationText = "Drag the charge, tap a tile to inspect it. The numerical flux should track Q/ε₀ while the charge stays inside the cube.";
+        entry.explanationText = "Drag the charge, tap a tile to inspect it. The numerical flux should track Q/ε0 while the charge stays inside the cube.";
         EditorUtility.SetDirty(entry);
         AssetDatabase.SaveAssets();
     }

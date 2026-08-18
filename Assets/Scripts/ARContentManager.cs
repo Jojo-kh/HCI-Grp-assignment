@@ -30,6 +30,13 @@ public class ARContentManager : MonoBehaviour
     ARTrackedImageManager trackedImageManager;
     readonly Dictionary<TrackableId, GameObject> spawnedContent = new();
 
+    // Only one marker's content is shown at a time, even though
+    // ARTrackedImageManager can track several images simultaneously (up to
+    // m_MaxNumberOfMovingImages) - e.g. two lesson pages both happen to be in
+    // frame at once. Without this, every simultaneously-tracked marker's
+    // content rendered at the same time, overlapping each other.
+    TrackableId activeTrackableId;
+
     void Awake()
     {
         trackedImageManager = GetComponent<ARTrackedImageManager>();
@@ -50,9 +57,10 @@ public class ARContentManager : MonoBehaviour
                 Destroy(instance);
                 spawnedContent.Remove(removed.Key);
             }
-
-            SetPanelActive(removed.Value.referenceImage.name, false);
+            if (activeTrackableId == removed.Key) activeTrackableId = default;
         }
+
+        RefreshVisibility();
     }
 
     void UpdateContent(ARTrackedImage trackedImage)
@@ -60,21 +68,55 @@ public class ARContentManager : MonoBehaviour
         var entry = database.GetByImageName(trackedImage.referenceImage.name);
         if (entry == null) return;
 
-        bool isTracking = trackedImage.trackingState == TrackingState.Tracking;
-
-        SetPanelActive(trackedImage.referenceImage.name, isTracking);
-        if (entry.contentPrefab == null) return;
-
-        if (!spawnedContent.TryGetValue(trackedImage.trackableId, out var instance))
+        if (entry.contentPrefab != null && !spawnedContent.ContainsKey(trackedImage.trackableId))
         {
-            instance = Instantiate(entry.contentPrefab, trackedImage.transform);
+            var instance = Instantiate(entry.contentPrefab, trackedImage.transform);
             instance.transform.localPosition = Vector3.zero;
             instance.transform.localRotation = Quaternion.identity;
             instance.transform.localScale = entry.localScaleOverride;
             spawnedContent[trackedImage.trackableId] = instance;
         }
 
-        instance.SetActive(isTracking);
+        // Only a confidently-Tracking read claims focus - a marker merely
+        // glimpsed at Limited confidence (e.g. an old marker still faintly in
+        // frame) never steals focus back from whatever the user is actually
+        // pointed at now.
+        if (trackedImage.trackingState == TrackingState.Tracking)
+            activeTrackableId = trackedImage.trackableId;
+    }
+
+    void RefreshVisibility()
+    {
+        foreach (var trackedImage in trackedImageManager.trackables)
+        {
+            // Limited still counts as visible for whichever marker is active - ARKit
+            // reports Limited while still holding a recent/extrapolated pose (the
+            // marker drifts to the edge of frame, gets briefly occluded, the device
+            // moves quickly) - only None (tracking actually lost) hides it.
+            bool isVisible = trackedImage.trackableId == activeTrackableId
+                && trackedImage.trackingState != TrackingState.None;
+
+            SetPanelActive(trackedImage.referenceImage.name, isVisible);
+            if (spawnedContent.TryGetValue(trackedImage.trackableId, out var instance) && instance != null)
+                instance.SetActive(isVisible);
+        }
+    }
+
+    /// <summary>
+    /// Destroys every spawned AR content instance so the next time any marker is
+    /// (re)tracked it gets a completely fresh instance instead of the same one -
+    /// still carrying whatever pinch-zoom/drag/position-button state was left on it
+    /// last time - being silently reactivated. Call this when leaving content view
+    /// (e.g. AppFlowController.ShowDashboard) so re-scanning a marker always starts
+    /// from a clean scene. Tracked images that are still in frame will simply get a
+    /// new instance spawned again on their next OnTrackedImagesChanged update.
+    /// </summary>
+    public void ClearAllContent()
+    {
+        foreach (var instance in spawnedContent.Values)
+            if (instance != null) Destroy(instance);
+        spawnedContent.Clear();
+        activeTrackableId = default;
     }
 
     void SetPanelActive(string imageName, bool active)

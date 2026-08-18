@@ -22,7 +22,7 @@ public class GaussianSurfaceUIBridge : MonoBehaviour
         if (controller == null) return;
 
         if (fluxText != null)
-            fluxText.text = $"Numerical flux: {controller.TotalNumericalFlux:F2} N·m²/C\nTheoretical Q/ε₀: {controller.TheoreticalFlux:F2} N·m²/C";
+            fluxText.text = $"Numerical flux: {controller.TotalNumericalFlux:F2} N·m²/C\nTheoretical Q/ε0: {controller.TheoreticalFlux:F2} N·m²/C";
 
         if (tileInfoText != null)
         {

@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6571819923346925702
 Transform:
   m_ObjectHideFlags: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &311094300270475049
@@ -257,7 +257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6758518718149654088
 Transform:
   m_ObjectHideFlags: 0
@@ -342,7 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &872627635782253704
@@ -363,7 +363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1148242408348276357
 Transform:
   m_ObjectHideFlags: 0
@@ -448,7 +448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &949495201715542737
@@ -469,7 +469,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1887062759829948277
 Transform:
   m_ObjectHideFlags: 0
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &962329375819085697
@@ -660,7 +660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &1060450060457272282
@@ -766,7 +766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &1139956283920135858
@@ -787,7 +787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1760781284157693328
 Transform:
   m_ObjectHideFlags: 0
@@ -872,7 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &1425872335984335072
@@ -983,90 +983,43 @@ MonoBehaviour:
   normalFaceColor: {r: 0.3, g: 0.6, b: 1, a: 0.18}
   fieldArrows:
   - {fileID: 1992866611161272525}
-  - {fileID: 6758518718149654088}
-  - {fileID: 1148242408348276357}
-  - {fileID: 3212066366629228608}
   - {fileID: 2268286919080026958}
-  - {fileID: 6229397164244194433}
-  - {fileID: 6571819923346925702}
-  - {fileID: 7487992774401989336}
   - {fileID: 8312057477563118042}
-  - {fileID: 5422778489820880014}
   - {fileID: 2041448775447640319}
-  - {fileID: 777398060200563172}
   - {fileID: 3372880973336708021}
   - {fileID: 4179283179804700443}
-  - {fileID: 6843816872539696575}
   - {fileID: 7089038252862459297}
-  - {fileID: 225194801178895196}
-  - {fileID: 8608695015209928837}
-  - {fileID: 9138245963767455607}
   - {fileID: 7251058237198263274}
-  - {fileID: 1760781284157693328}
   - {fileID: 9057169802926055547}
-  - {fileID: 854477247938663956}
   - {fileID: 4271932683636377125}
-  - {fileID: 8507098402749504128}
-  - {fileID: 1887062759829948277}
   fieldArrowRenderers:
   - {fileID: 8483443790806244908}
-  - {fileID: 3746757487320008980}
-  - {fileID: 7508334798700446282}
-  - {fileID: 8183593870298296582}
   - {fileID: 5383193855999728641}
-  - {fileID: 3526288259536589629}
-  - {fileID: 3738431727599596731}
-  - {fileID: 7422896809003946419}
   - {fileID: 7381538983975885357}
-  - {fileID: 5814850257781299828}
   - {fileID: 3583488709949320374}
-  - {fileID: 6723110898296469953}
   - {fileID: 4616118684417784291}
   - {fileID: 3674915884573680437}
-  - {fileID: 7560112351917916887}
   - {fileID: 1038337117629138610}
-  - {fileID: 8728459750140913950}
-  - {fileID: 1307026028137404510}
-  - {fileID: 5973624903625921343}
   - {fileID: 4877231909301486392}
-  - {fileID: 5402165459037274254}
   - {fileID: 724426020002585122}
-  - {fileID: 3315553449685728425}
   - {fileID: 5275020490410963485}
-  - {fileID: 2733548279815025866}
-  - {fileID: 8951111189886529326}
   fieldArrowDirections:
   - {x: -0.57735026, y: -0.57735026, z: -0.57735026}
-  - {x: -0.70710677, y: -0.70710677, z: 0}
-  - {x: -0.57735026, y: -0.57735026, z: 0.57735026}
-  - {x: -0.70710677, y: 0, z: -0.70710677}
   - {x: -1, y: 0, z: 0}
-  - {x: -0.70710677, y: 0, z: 0.70710677}
-  - {x: -0.57735026, y: 0.57735026, z: -0.57735026}
-  - {x: -0.70710677, y: 0.70710677, z: 0}
   - {x: -0.57735026, y: 0.57735026, z: 0.57735026}
-  - {x: 0, y: -0.70710677, z: -0.70710677}
   - {x: 0, y: -1, z: 0}
-  - {x: 0, y: -0.70710677, z: 0.70710677}
   - {x: 0, y: 0, z: -1}
   - {x: 0, y: 0, z: 1}
-  - {x: 0, y: 0.70710677, z: -0.70710677}
   - {x: 0, y: 1, z: 0}
-  - {x: 0, y: 0.70710677, z: 0.70710677}
-  - {x: 0.57735026, y: -0.57735026, z: -0.57735026}
-  - {x: 0.70710677, y: -0.70710677, z: 0}
   - {x: 0.57735026, y: -0.57735026, z: 0.57735026}
-  - {x: 0.70710677, y: 0, z: -0.70710677}
   - {x: 1, y: 0, z: 0}
-  - {x: 0.70710677, y: 0, z: 0.70710677}
   - {x: 0.57735026, y: 0.57735026, z: -0.57735026}
-  - {x: 0.70710677, y: 0.70710677, z: 0}
-  - {x: 0.57735026, y: 0.57735026, z: 0.57735026}
   fieldArrowSampleDistance: 0.3
+  fieldArrowGapFromSurface: 0.04
   fieldArrowColor: {r: 0.86, g: 0.83, b: 0.24, a: 1}
   fieldArrowScaleMultiplier: 0.03
   fieldArrowMinScale: 1
-  fieldArrowMaxScale: 5
+  fieldArrowMaxScale: 2.2
 --- !u!114 &5439079801774696196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1234,7 +1187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &777398060200563172
 Transform:
   m_ObjectHideFlags: 0
@@ -1319,7 +1272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2199486782885373572
@@ -1340,7 +1293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8507098402749504128
 Transform:
   m_ObjectHideFlags: 0
@@ -1425,7 +1378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2254280494215180301
@@ -1531,7 +1484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2568249634771561231
@@ -1637,7 +1590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2593253477935329338
@@ -1791,7 +1744,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &854477247938663956
 Transform:
   m_ObjectHideFlags: 0
@@ -1876,7 +1829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3293281518975119011
@@ -1982,7 +1935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3351656765543945159
@@ -2136,7 +2089,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7487992774401989336
 Transform:
   m_ObjectHideFlags: 0
@@ -2221,7 +2174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3544541802007912974
@@ -2242,7 +2195,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6229397164244194433
 Transform:
   m_ObjectHideFlags: 0
@@ -2327,7 +2280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3879618932557796607
@@ -2348,7 +2301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3212066366629228608
 Transform:
   m_ObjectHideFlags: 0
@@ -2433,7 +2386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4107107549526812661
@@ -2454,7 +2407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &225194801178895196
 Transform:
   m_ObjectHideFlags: 0
@@ -2539,7 +2492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4215370718160844354
@@ -2560,7 +2513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8608695015209928837
 Transform:
   m_ObjectHideFlags: 0
@@ -2645,7 +2598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4391859420219570943
@@ -2751,7 +2704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4452515144020023321
@@ -2857,7 +2810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4522820543396918821
@@ -3314,7 +3267,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9138245963767455607
 Transform:
   m_ObjectHideFlags: 0
@@ -3399,7 +3352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &5552929086253895193
@@ -3505,7 +3458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &5786815690909852273
@@ -3616,7 +3569,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6843816872539696575
 Transform:
   m_ObjectHideFlags: 0
@@ -3701,7 +3654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &6763906876271673089
@@ -3831,7 +3784,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5422778489820880014
 Transform:
   m_ObjectHideFlags: 0
@@ -3916,7 +3869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &7212411281900717611
@@ -4022,7 +3975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &7561354586898986613
@@ -4128,7 +4081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.12
+  size: 0.18
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &7859531977434585876

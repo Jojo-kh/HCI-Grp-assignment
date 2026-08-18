@@ -56,6 +56,8 @@ public class GaussianSurfaceController : MonoBehaviour
     public Vector3[] fieldArrowDirections;
     [Tooltip("How far from the charge (in local units) the field is sampled to size each arrow.")]
     public float fieldArrowSampleDistance = 0.3f;
+    [Tooltip("Baked into each arrow's own mesh (ArrowMeshBuilder.baseOffset, applied once at Start - see ApplyFieldArrowGap) as invisible length near the pivot, so the pivot itself can sit exactly at the charge's surface (arrows read as shot out of the charge) while the visible shaft still starts a little further out instead of right at the surface.")]
+    public float fieldArrowGapFromSurface = 0.04f;
     public Color fieldArrowColor = new Color(0.86f, 0.83f, 0.24f);
     public float fieldArrowScaleMultiplier = 0.03f;
     public float fieldArrowMinScale = 1f;
@@ -88,6 +90,29 @@ public class GaussianSurfaceController : MonoBehaviour
         TheoreticalFlux = (chargeNanoCoulombs * 1e-9f) / VacuumPermittivity;
         SetResolution(resolution);
         SetTilesVisible(TilesVisible);
+        ApplyFieldArrowGap();
+    }
+
+    /// <summary>
+    /// Bakes fieldArrowGapFromSurface into each arrow's own mesh (ArrowMeshBuilder.
+    /// baseOffset) once at startup, rather than as a per-frame position offset -
+    /// so the object's transform can sit exactly at the charge's surface (see
+    /// UpdateFieldArrows) while the drawn shape still starts a little further out.
+    /// One-time only: rebuilding a mesh every frame in Update() would allocate a
+    /// new Mesh every frame, the same class of bug that caused the TMP crash this
+    /// text sits next to.
+    /// </summary>
+    void ApplyFieldArrowGap()
+    {
+        if (fieldArrows == null) return;
+        foreach (var arrow in fieldArrows)
+        {
+            if (arrow == null) continue;
+            var builder = arrow.GetComponent<ArrowMeshBuilder>();
+            if (builder == null) continue;
+            builder.baseOffset = fieldArrowGapFromSurface;
+            builder.Build();
+        }
     }
 
     void Update()
@@ -188,6 +213,14 @@ public class GaussianSurfaceController : MonoBehaviour
         if (charge == null || fieldArrows == null) return;
 
         Vector3 chargeLocal = transform.InverseTransformPoint(charge.position);
+        // charge is a direct child of this content root, so its localScale is
+        // already in the same local-unit space as cubeSize/fieldArrowSampleDistance
+        // etc. (unlike lossyScale, which would double up this content's own
+        // external AR scale - see RodsChargeController.RodRadiusScale for exactly
+        // that bug). Assumes a uniform-scale default sphere primitive (radius =
+        // half its scale).
+        float chargeRadius = charge.localScale.x * 0.5f;
+
         for (int i = 0; i < fieldArrows.Length; i++)
         {
             var arrow = fieldArrows[i];
@@ -197,7 +230,10 @@ public class GaussianSurfaceController : MonoBehaviour
             Vector3 sampleLocal = chargeLocal + dir * fieldArrowSampleDistance;
             Vector3 field = FieldAt(sampleLocal, chargeLocal);
 
-            arrow.position = charge.position;
+            // Pivot sits exactly at the charge's surface, as if the arrow is shot
+            // out of the charge itself - the visible gap comes from baseOffset
+            // baked into the mesh (see ApplyFieldArrowGap), not a position offset.
+            arrow.position = charge.position + transform.TransformDirection(dir) * chargeRadius;
             float mag = field.magnitude;
             if (mag > 0.0001f)
                 arrow.rotation = BillboardRotation(field.normalized, charge.position);

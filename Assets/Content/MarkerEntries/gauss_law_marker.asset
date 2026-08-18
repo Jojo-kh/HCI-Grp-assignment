@@ -16,6 +16,6 @@ MonoBehaviour:
   contentPrefab: {fileID: 1425872335984335072, guid: 466db6b53f513a74d9b072b5b063b11f, type: 3}
   subjectTitle: Gaussian Surfaces
   explanationText: "Drag the charge, tap a tile to inspect it. The numerical flux
-    should track Q/\u03B5\u2080 while the charge stays inside the cube."
-  localScaleOverride: {x: 1, y: 1, z: 1}
+    should track Q/\u03B50 while the charge stays inside the cube."
+  localScaleOverride: {x: 0.15, y: 0.15, z: 0.15}
   uiPanel: {fileID: 0}

@@ -2,19 +2,40 @@ using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// Drives the "Rods & Charge" AR content.
-/// Each rod produces a radial field (Forward = points away, Reverse = points
-/// toward it) that falls off with distance. The resultant field at the test
-/// charge's position is the vector sum of both rods' contributions � real
-/// superposition, not a lookup table.
+/// Drives the "Rods & Charge" AR content. Deliberately simplified rather than a
+/// literal circulating magnetic field: each rod pushes/pulls straight along the
+/// perpendicular from itself to a point, falling off as 1/r. Push vs pull isn't
+/// simply "Forward pushes, Reverse pulls" - it follows the rod's actual current
+/// direction relative to the content's own right side (current running toward
+/// content-right pushes/repels, toward content-left pulls/attracts - see
+/// FieldFromRod), matching whichever way its little yellow surface arrows
+/// (RodDirectionArrows) are actually drawn, not just the Forward/Reverse label.
+/// That's what both the resultant arrow at the test charge and the "radial
+/// lines" visual are built from (FieldFromRod/CombinedField) - real
+/// superposition of both rods' contributions, so two rods can genuinely cancel
+/// or add depending on their actual current directions and the charge's
+/// position, exactly as "Opposite Currents" intends.
+/// (A real current-carrying wire's B-field actually circulates around it per the
+/// right-hand rule rather than pushing straight out - TangentialFromRod/
+/// CombinedTangential still model that if this ever needs to switch back - but
+/// this content intentionally trades that rigor for a simpler, more readable
+/// straight-line effect.)
 ///
-/// Two independent static visualizations sit on top of that:
-///  - Circulation Curtain: small arrows looping around each rod's surface.
-///  - Radial Lines: straight arrows shooting in/out at 4 fixed cardinal
-///    positions around each rod (not every angle).
+/// Radial Lines: straight arrows shooting in/out at 4 fixed cardinal positions
+/// around each rod (not every angle) - visualizes this same field, flipping with
+/// each rod's direction.
 /// </summary>
 public class RodsChargeController : MonoBehaviour
 {
+    /// <summary>
+    /// "Adds" / "Cancels" / "Partial Cancellation" / "No Field" for whichever position
+    /// the test charge is currently at - kept up to date every frame regardless of
+    /// whether relationshipLabel is wired, so screen-space UI (which can't hold a
+    /// persisting reference into this runtime-instantiated content - see
+    /// RodsChargeUIBridge) can read it through RodsChargeController.Current instead.
+    /// </summary>
+    public string CurrentRelationship { get; private set; } = "";
+
     /// <summary>
     /// The currently active instance, if a Rods & Charge marker is being tracked.
     /// AR content is instantiated at runtime per marker, so it can't be dragged
@@ -69,6 +90,8 @@ public class RodsChargeController : MonoBehaviour
     public float arrowScaleMultiplier = 1f;
     [Tooltip("Minimum arrow scale so it never fully disappears even near-cancellation.")]
     public float minArrowScale = 0.05f;
+    [Tooltip("Maximum arrow scale so it can't grow without bound if the charge ends up very close to a rod.")]
+    public float maxArrowScale = 1f;
     [Tooltip("Below this fraction of the larger individual contribution, we call it 'Cancels'.")]
     [Range(0f, 1f)] public float cancelThreshold = 0.15f;
     [Tooltip("Above this fraction of (contribution A + contribution B), we call it 'Adds'.")]
@@ -151,6 +174,33 @@ public class RodsChargeController : MonoBehaviour
         MoveChargeTo(posBetween);
     }
 
+    // Hook these up to a tap on each rod (see RodTapToggle), same tap-to-toggle
+    // concept as ChargeTapToggle on the electrical charges.
+    public void ToggleRodADirection()
+    {
+        rodADirection = rodADirection == RodDirection.Forward ? RodDirection.Reverse : RodDirection.Forward;
+        RefreshAfterDirectionChange();
+    }
+
+    public void ToggleRodBDirection()
+    {
+        rodBDirection = rodBDirection == RodDirection.Forward ? RodDirection.Reverse : RodDirection.Forward;
+        RefreshAfterDirectionChange();
+    }
+
+    /// <summary>
+    /// Re-derives everything direction depends on - the surface arrows, both field
+    /// visualizations, and the resultant at the test charge - so a tap-toggled rod
+    /// takes effect immediately rather than waiting for the next OnValidate/Update.
+    /// </summary>
+    void RefreshAfterDirectionChange()
+    {
+        SyncRodDirectionArrows();
+        if (buildCirculationCurtain) BuildCirculationCurtain();
+        if (buildRadialLines) BuildRadialLines();
+        UpdateResultant();
+    }
+
     /// <summary>
     /// Pushes rodADirection/rodBDirection onto each rod's RodDirectionArrows so the
     /// little surface arrows always point the same way as the circulation curtain
@@ -200,8 +250,15 @@ public class RodsChargeController : MonoBehaviour
     }
 
     /// <summary>
-    /// Radial field contribution from a single rod. Forward points away from
-    /// the rod, Reverse points toward it. Falls off as 1/r.
+    /// Radial field contribution from a single rod, falling off as 1/r. Push vs
+    /// pull isn't tied to the Forward/Reverse label directly - it follows the
+    /// rod's actual current direction (axis * dir, the same direction
+    /// RodDirectionArrows draws) relative to the content's own right side: current
+    /// running toward content-right pushes (repels), current running toward
+    /// content-left pulls (attracts). Two rods with the same current direction can
+    /// therefore end up on opposite sides of push/pull if one is wired Forward and
+    /// the other Reverse to run the opposite way, which is the point of "Opposite
+    /// Currents."
     /// </summary>
     Vector3 FieldFromRod(Transform rod, RodDirection dir, Vector3 worldPoint)
     {
@@ -216,7 +273,10 @@ public class RodsChargeController : MonoBehaviour
         if (r < 0.001f) return Vector3.zero;
 
         Vector3 radialDir = perp.normalized;
-        return radialDir * (1f / r) * (float)dir;
+        Vector3 currentDirectionWorld = axis * (float)dir;
+        float pushSign = Vector3.Dot(currentDirectionWorld, transform.right) >= 0f ? 1f : -1f;
+
+        return radialDir * (1f / r) * pushSign;
     }
 
     Vector3 CombinedField(Vector3 worldPoint)
@@ -224,7 +284,11 @@ public class RodsChargeController : MonoBehaviour
         return FieldFromRod(rodA, rodADirection, worldPoint) + FieldFromRod(rodB, rodBDirection, worldPoint);
     }
 
-    /// <summary>Tangential (circulating) contribution � used only by the circulation curtain.</summary>
+    /// <summary>
+    /// The real field: circulates around the rod per the right-hand rule (Forward =
+    /// curls one way, Reverse = curls the other), falling off as 1/r - drives both
+    /// the circulation curtain and the resultant arrow at the test charge.
+    /// </summary>
     Vector3 TangentialFromRod(Transform rod, RodDirection dir, Vector3 worldPoint)
     {
         if (rod == null) return Vector3.zero;
@@ -262,9 +326,9 @@ public class RodsChargeController : MonoBehaviour
 
             float resultMag = resultant.magnitude;
             if (resultMag > 0.0001f)
-                resultantArrow.rotation = Quaternion.FromToRotation(Vector3.up, resultant.normalized);
+                resultantArrow.rotation = BillboardRotation(resultant.normalized, pointWorld);
 
-            float scale = Mathf.Max(minArrowScale, resultMag * arrowScaleMultiplier);
+            float scale = Mathf.Clamp(resultMag * arrowScaleMultiplier, minArrowScale, maxArrowScale);
             resultantArrow.localScale = new Vector3(resultantArrow.localScale.x, scale, resultantArrow.localScale.z);
         }
 
@@ -274,28 +338,24 @@ public class RodsChargeController : MonoBehaviour
             SetRendererColor(resultantArrowRenderer, alignment >= 0f ? forwardColor : reverseColor);
         }
 
-        if (relationshipLabel != null)
+        float magA = fA.magnitude;
+        float magB = fB.magnitude;
+        float sumOfMags = magA + magB;
+        float netMag = resultant.magnitude;
+
+        if (sumOfMags < 0.0001f)
         {
-            float magA = fA.magnitude;
-            float magB = fB.magnitude;
-            float sumOfMags = magA + magB;
-            float resultMag = resultant.magnitude;
-
-            string relationship;
-            if (sumOfMags < 0.0001f)
-            {
-                relationship = "No Field";
-            }
-            else
-            {
-                float ratio = resultMag / sumOfMags;
-                if (ratio <= cancelThreshold) relationship = "Fields Cancel";
-                else if (ratio >= addThreshold) relationship = "Fields Add";
-                else relationship = "Partial Cancellation";
-            }
-
-            relationshipLabel.text = relationship;
+            CurrentRelationship = "No Field";
         }
+        else
+        {
+            float ratio = netMag / sumOfMags;
+            if (ratio <= cancelThreshold) CurrentRelationship = "Fields Cancel";
+            else if (ratio >= addThreshold) CurrentRelationship = "Fields Add";
+            else CurrentRelationship = "Partial Cancellation";
+        }
+
+        if (relationshipLabel != null) relationshipLabel.text = CurrentRelationship;
     }
 
     // ---------------- Circulation Curtain ----------------
@@ -380,16 +440,20 @@ public class RodsChargeController : MonoBehaviour
     // ---------------- Shared helpers ----------------
 
     /// <summary>
-    /// Average of the rod's actual world X/Z scale (its radius dimensions - the rod
-    /// is a round cylinder, so those two should stay equal). Used to size and space
-    /// the circulation curtain / radial line arrows in proportion to however big the
-    /// rod itself has been scaled, instead of a fixed absolute size that only looks
-    /// right at one particular rod scale.
+    /// Average of the rod's own LOCAL X/Z scale (its radius dimensions relative to
+    /// its parent - the content root - not lossyScale/world scale). The spawned
+    /// arrows end up parented under this same content root, so they already inherit
+    /// the content's own external scale (e.g. MarkerContentEntry.localScaleOverride)
+    /// through normal Unity transform inheritance; baking lossyScale into their mesh
+    /// size on top of that would apply the content's external scale twice, shrinking
+    /// them by its square instead of by itself (this used to be exactly that bug -
+    /// circulation/radial arrows and the auto-scaled test charge were coming out
+    /// roughly (content scale) times smaller than intended).
     /// </summary>
     float RodRadiusScale(Transform rod)
     {
         if (rod == null) return 1f;
-        Vector3 s = rod.lossyScale;
+        Vector3 s = rod.localScale;
         return (Mathf.Abs(s.x) + Mathf.Abs(s.z)) / 2f;
     }
 
@@ -478,6 +542,29 @@ public class RodsChargeController : MonoBehaviour
         r.GetPropertyBlock(propBlock);
         propBlock.SetColor("_BaseColor", c);
         r.SetPropertyBlock(propBlock);
+    }
+
+    /// <summary>
+    /// Rotation with local +Y locked exactly to lengthDir (the real resultant
+    /// direction - the actual pull from both rods' current directions) while local
+    /// +Z (the arrow's flat face normal) is rotated around that axis to point as
+    /// closely as possible at the camera, so the resultant arrow always reads as a
+    /// flat shape facing the viewer rather than edge-on, however the AR device
+    /// turns - same technique GaussianSurfaceController/ElectricalForceController
+    /// use for their own field arrows.
+    /// </summary>
+    Quaternion BillboardRotation(Vector3 lengthDir, Vector3 origin)
+    {
+        var cam = Camera.main;
+        Vector3 toCamera = cam != null ? (cam.transform.position - origin).normalized : Vector3.back;
+
+        Vector3 xAxis = Vector3.Cross(toCamera, lengthDir);
+        if (xAxis.sqrMagnitude < 0.0001f) xAxis = Vector3.Cross(Vector3.up, lengthDir);
+        if (xAxis.sqrMagnitude < 0.0001f) xAxis = Vector3.right;
+        xAxis.Normalize();
+
+        Vector3 zAxis = Vector3.Cross(xAxis, lengthDir).normalized;
+        return Quaternion.LookRotation(zAxis, lengthDir);
     }
 
 #if UNITY_EDITOR

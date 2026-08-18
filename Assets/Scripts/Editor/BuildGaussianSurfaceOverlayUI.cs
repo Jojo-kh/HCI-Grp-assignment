@@ -83,7 +83,7 @@ public static class BuildGaussianSurfaceOverlayUI
 
         SetText(panel.transform, "KickerText", "ELECTROMAGNETIC THEORY");
         SetText(panel.transform, "TitleText", "Gaussian Surfaces");
-        SetText(panel.transform, "DescriptionText", "Numerical flux: —\nTheoretical Q/ε₀: —");
+        SetText(panel.transform, "DescriptionText", "Numerical flux: —\nTheoretical Q/ε0: —");
         var fluxText = panel.transform.Find("DescriptionText")?.GetComponent<TextMeshProUGUI>();
         if (fluxText != null) fluxText.color = AccentColor;
 

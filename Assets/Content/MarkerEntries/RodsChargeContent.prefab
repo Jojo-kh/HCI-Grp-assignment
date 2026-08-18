@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f39a68e001baf428820a99c04e5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
-  size: 0.3
+  size: 1.8
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2848728892981550569
@@ -177,14 +177,15 @@ MonoBehaviour:
   reverseColor: {r: 1, g: 0, b: 0, a: 1}
   arrowScaleMultiplier: 1
   minArrowScale: 0.05
+  maxArrowScale: 1
   cancelThreshold: 0.15
   addThreshold: 0.85
-  buildCirculationCurtain: 1
+  buildCirculationCurtain: 0
   circLinesAlongLength: 5
   circLinesAroundCircumference: 8
   circStepsPerLine: 6
   circStepDistance: 0.1
-  circArrowSize: 0.04
+  circArrowSize: 0.45
   circArrowThicknessRatio: 0.02
   circArrowMaterial: {fileID: 2100000, guid: bc2b04473dccf844e935a452f02b69ce, type: 2}
   buildRadialLines: 1
@@ -192,7 +193,7 @@ MonoBehaviour:
   radialStepsPerLine: 6
   radialStepDistance: 0.15
   radialReachMultiplier: 2
-  radialArrowSize: 0.05
+  radialArrowSize: 0.5
   radialArrowThicknessRatio: 0.02
   radialArrowMaterial: {fileID: 2100000, guid: bc2b04473dccf844e935a452f02b69ce, type: 2}
   circContainer: {fileID: 0}
@@ -226,6 +227,7 @@ GameObject:
   - component: {fileID: 1695328412421125676}
   - component: {fileID: 5275214599613458172}
   - component: {fileID: 1492894805193710150}
+  - component: {fileID: 7971078197250121859}
   m_Layer: 0
   m_Name: RodA
   m_TagString: Untagged
@@ -349,6 +351,19 @@ MonoBehaviour:
   arrowThicknessRatio: 0.01
   arrowColor: {r: 0.867, g: 0.831, b: 0.235, a: 1}
   arrowMaterial: {fileID: 2100000, guid: fc1521e7bd0ea794e850bf51c391038f, type: 2}
+--- !u!114 &7971078197250121859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3902017072672562142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec3296f188b4a5598a7036cf4aa66fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RodTapToggle
+  rod: 0
 --- !u!1 &4534540688965679433
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,6 +377,7 @@ GameObject:
   - component: {fileID: 556165428875955800}
   - component: {fileID: 1978021818737097252}
   - component: {fileID: 5274021539258552189}
+  - component: {fileID: 1040457029354740408}
   m_Layer: 0
   m_Name: RodB
   m_TagString: Untagged
@@ -485,6 +501,19 @@ MonoBehaviour:
   arrowThicknessRatio: 0.01
   arrowColor: {r: 0.867, g: 0.831, b: 0.235, a: 1}
   arrowMaterial: {fileID: 2100000, guid: fc1521e7bd0ea794e850bf51c391038f, type: 2}
+--- !u!114 &1040457029354740408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4534540688965679433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec3296f188b4a5598a7036cf4aa66fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RodTapToggle
+  rod: 1
 --- !u!1 &4722544349991500416
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +605,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.05, z: 0.17}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7895441031898349198}

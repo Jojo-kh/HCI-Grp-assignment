@@ -35,19 +35,24 @@ public class AppFlowController : MonoBehaviour
     [Header("Timing")]
     public float notRecognizedAfterSeconds = 6f;
     public float backToSearchingAfterSeconds = 4f;
+    [Tooltip("Floor on how long the live camera/Searching UI stays up after ShowScan(), even if a marker is recognised instantly - otherwise a marker already in frame can skip straight to Found within a single frame.")]
+    public float minSearchingSeconds = 1f;
     public float foundToLoadingDelay = 0.6f;
     public float loadingToContentDelay = 0.6f;
 
     enum ScanState { Searching, Found, NotRecognized, Loading }
     ScanState state;
     float stateTimer;
+    float scanOpenTime;
     bool trackingSeenThisSession;
 
     ARTrackedImageManager trackedImageManager;
+    ARContentManager contentManager;
 
     void Awake()
     {
         trackedImageManager = FindFirstObjectByType<ARTrackedImageManager>();
+        contentManager = FindFirstObjectByType<ARContentManager>();
     }
 
     void OnEnable()
@@ -95,6 +100,13 @@ public class AppFlowController : MonoBehaviour
         if (scanCanvas == null || !scanCanvas.activeSelf) return;
         if (state == ScanState.Found || state == ScanState.Loading) return;
 
+        float remaining = Mathf.Max(0f, minSearchingSeconds - (Time.time - scanOpenTime));
+        CancelInvoke(nameof(EnterFoundState));
+        Invoke(nameof(EnterFoundState), remaining);
+    }
+
+    void EnterFoundState()
+    {
         SetScanState(ScanState.Found);
         CancelInvoke(nameof(ProceedToLoading));
         Invoke(nameof(ProceedToLoading), foundToLoadingDelay);
@@ -117,6 +129,10 @@ public class AppFlowController : MonoBehaviour
         CancelInvoke();
         if (scanCanvas != null) scanCanvas.SetActive(false);
         if (dashboardCanvas != null) dashboardCanvas.SetActive(true);
+        // Drop whatever's currently spawned so a marker scanned again later gets a
+        // completely fresh instance instead of the same one - still carrying
+        // leftover pinch-zoom/drag/position-button state - being silently reused.
+        contentManager?.ClearAllContent();
     }
 
     public void ShowScan()
@@ -125,6 +141,7 @@ public class AppFlowController : MonoBehaviour
         if (dashboardCanvas != null) dashboardCanvas.SetActive(false);
         if (scanCanvas != null) scanCanvas.SetActive(true);
         trackingSeenThisSession = false;
+        scanOpenTime = Time.time;
         SetScanState(ScanState.Searching);
     }
 

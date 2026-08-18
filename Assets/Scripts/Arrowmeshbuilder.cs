@@ -17,6 +17,8 @@ public class ArrowMeshBuilder : MonoBehaviour
     [Header("Size")]
     [Tooltip("Uniform scale for the whole arrow � the only shape control you need.")]
     public float size = 0.3f;
+    [Tooltip("Leaves this much empty, invisible length (in the same units as Size) between the pivot at local (0,0,0) and where the visible shaft actually starts - so the object's transform can sit exactly at a surface (e.g. a charge) while the drawn arrow still starts a little further out, reading as a gap without moving the pivot itself. 0 = shaft starts right at the pivot, the original behavior.")]
+    public float baseOffset = 0f;
 
     [Header("Troubleshooting")]
     [Tooltip("If the arrow looks invisible or 'inside out' from the front, tick this.")]
@@ -64,13 +66,13 @@ public class ArrowMeshBuilder : MonoBehaviour
 
         Vector2[] outline = new Vector2[]
         {
-            new Vector2(-shaftWidth / 2f, 0f),
-            new Vector2( shaftWidth / 2f, 0f),
-            new Vector2( shaftWidth / 2f, shaftLength),
-            new Vector2( headWidth  / 2f, shaftLength),
-            new Vector2( 0f,              shaftLength + headLength),
-            new Vector2(-headWidth  / 2f, shaftLength),
-            new Vector2(-shaftWidth / 2f, shaftLength),
+            new Vector2(-shaftWidth / 2f, baseOffset),
+            new Vector2( shaftWidth / 2f, baseOffset),
+            new Vector2( shaftWidth / 2f, baseOffset + shaftLength),
+            new Vector2( headWidth  / 2f, baseOffset + shaftLength),
+            new Vector2( 0f,              baseOffset + shaftLength + headLength),
+            new Vector2(-headWidth  / 2f, baseOffset + shaftLength),
+            new Vector2(-shaftWidth / 2f, baseOffset + shaftLength),
         };
 
         int[][] capTris = new int[][]
