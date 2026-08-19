@@ -67,6 +67,16 @@ public class RodDirectionArrows : MonoBehaviour
         UnityEditor.EditorApplication.delayCall += () =>
         {
             if (this == null) return;
+
+            // Build() reparents generated children via SetParent, which Unity disables for
+            // objects living directly in a Prefab Asset on disk (outside Prefab Mode) to
+            // prevent data corruption - triggering that error on every domain reload/recompile
+            // for RodA/RodB even when RodsChargeContent.prefab wasn't touched. Skip in that
+            // case; still rebuild for scene instances and when actually editing in Prefab Mode.
+            if (UnityEditor.PrefabUtility.IsPartOfPrefabAsset(gameObject) &&
+                UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(gameObject) == null)
+                return;
+
             Build();
         };
     }
