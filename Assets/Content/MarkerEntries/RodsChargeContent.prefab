@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 1.8
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2848728892981550569

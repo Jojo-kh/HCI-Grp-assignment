@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+#if UNITY_EDITOR
+using UnityEngine.InputSystem;
+#endif
 
 /// <summary>
 /// Owns top-level screen switching: Dashboard <-> Scan <-> per-marker content
@@ -67,6 +70,24 @@ public class AppFlowController : MonoBehaviour
 
     void Update()
     {
+#if UNITY_EDITOR
+        // Demo-only shortcuts for previewing each marker's content panel without a
+        // real printed marker in frame (e.g. in Device Simulator). Not compiled into
+        // device builds. Uses the Input System package directly (rather than the
+        // legacy UnityEngine.Input class) since this project's Active Input Handling
+        // is set to "Input System Package" only. 1/2/3 = Rods & Charge / Electrical
+        // Force / Gaussian Surfaces (matches contentInfoPanels' order), 0 = back to
+        // dashboard.
+        var keyboard = Keyboard.current;
+        if (keyboard != null)
+        {
+            if (keyboard.digit1Key.wasPressedThisFrame) DebugShowContentPanel(0);
+            if (keyboard.digit2Key.wasPressedThisFrame) DebugShowContentPanel(1);
+            if (keyboard.digit3Key.wasPressedThisFrame) DebugShowContentPanel(2);
+            if (keyboard.digit0Key.wasPressedThisFrame) ShowDashboard();
+        }
+#endif
+
         bool anyContentActive = false;
         if (contentInfoPanels != null)
         {
@@ -144,6 +165,25 @@ public class AppFlowController : MonoBehaviour
         scanOpenTime = Time.time;
         SetScanState(ScanState.Searching);
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Demo-only: jumps straight to one marker's content panel, bypassing real
+    /// image tracking - lets you preview each marker's UI in Device Simulator
+    /// (or the Editor Game view) without a printed marker or camera. Does not
+    /// spawn the marker's actual 3D AR content, since that's positioned relative
+    /// to a real tracked-image transform; this only shows the screen-space panel.
+    /// </summary>
+    void DebugShowContentPanel(int index)
+    {
+        if (contentInfoPanels == null || index < 0 || index >= contentInfoPanels.Length) return;
+        CancelInvoke();
+        if (scanCanvas != null) scanCanvas.SetActive(false);
+        if (dashboardCanvas != null) dashboardCanvas.SetActive(false);
+        for (int i = 0; i < contentInfoPanels.Length; i++)
+            if (contentInfoPanels[i] != null) contentInfoPanels[i].SetActive(i == index);
+    }
+#endif
 
     void SetScanState(ScanState s)
     {

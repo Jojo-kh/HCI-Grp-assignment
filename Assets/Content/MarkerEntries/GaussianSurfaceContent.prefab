@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &311094300270475049
@@ -343,6 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &872627635782253704
@@ -449,6 +451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &949495201715542737
@@ -555,6 +558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &962329375819085697
@@ -661,6 +665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &1060450060457272282
@@ -767,6 +772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &1139956283920135858
@@ -873,6 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &1425872335984335072
@@ -1273,6 +1280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2199486782885373572
@@ -1379,6 +1387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2254280494215180301
@@ -1485,6 +1494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2568249634771561231
@@ -1591,6 +1601,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &2593253477935329338
@@ -1830,6 +1841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3293281518975119011
@@ -1936,6 +1948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3351656765543945159
@@ -2175,6 +2188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3544541802007912974
@@ -2281,6 +2295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &3879618932557796607
@@ -2387,6 +2402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4107107549526812661
@@ -2493,6 +2509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4215370718160844354
@@ -2599,6 +2616,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4391859420219570943
@@ -2705,6 +2723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4452515144020023321
@@ -2811,6 +2830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &4522820543396918821
@@ -3353,6 +3373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &5552929086253895193
@@ -3459,6 +3480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &5786815690909852273
@@ -3655,6 +3677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &6763906876271673089
@@ -3870,6 +3893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &7212411281900717611
@@ -3976,6 +4000,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &7561354586898986613
@@ -4082,6 +4107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowMeshBuilder
   size: 0.18
+  baseOffset: 0
   flipWinding: 0
   thicknessRatio: 0.15
 --- !u!1 &7859531977434585876
